@@ -23,7 +23,7 @@ ol, ul {
 }
 
 img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
@@ -32,50 +32,43 @@ img {
 
 /* elem */
 .elem {
-  border: solid #6AC5AC 3px;
+  border: solid #6AC5AC 1px;
 }
 
 .box {
   display: inline-block;
-  width: calc(100% / 3);
-  height: 100px;
+  width: calc(100% / 2);
+  padding:10px;
 }
 
 #main {
   padding:10px;
+  width:100%;
 }
 
-@media screen and (min-width:800px) {
+.border {
+  border: 10px solid pink;
+  border-image: repeating-linear-gradient(-45deg,
+      transparent,
+      transparent 20px,
+      black 20px,
+      black 40px) 10;
+}
+
+@media screen and (min-width:700px) {
   #main {
-    width:800px;
+    width:700px;
   }
+}
+
+@media screen and (min-width:600px) {
   .box {
     width: calc(100% / 5);
   }
-}
-
-@media screen and (max-width:799px) {
-  #main {
-    width:100%;
-  }
-  .box {
-    width: calc(100% / 4);
-  }
-}
-@media screen and (min-width:600px) {
   #container {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh; /*new*/
-  }
-}
-@media screen and (max-width:599px) {
-  
-  #main {
-    width:100%;
-  }
-  .box {
-    width: calc(100% / 2);
   }
 }
