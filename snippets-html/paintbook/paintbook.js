@@ -1,4 +1,4 @@
-(function () {
+(function (win) {
   "use strict";
-  window.scrollTo(0, 1);
-}());
+  win.scrollTo(0, 1);
+}(this));
