@@ -69,7 +69,6 @@ body {
 }
 #drawing svg {
   border-color:#fff;
-  max-width:80vh; /* max-height:80vh makes svg scale crazy */
 }
 .box {
   display: inline-block;
@@ -122,4 +121,12 @@ img.animated {
   #main {
     width:700px;
   }
+}
+
+/* Landscape */
+@media only screen 
+  and (orientation: landscape) {
+    #drawing svg {
+      max-width:80vh; /* max-height:80vh makes svg scale crazy */
+    }
 }
