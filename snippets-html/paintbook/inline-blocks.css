@@ -2,11 +2,13 @@
 /* from https://alligator.io/css/minimal-css-reset/ */
 
 html {
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 62.5%;
 }
 
 *, *:before, *:after {
+  -webkit-box-sizing: inherit;
   box-sizing: inherit;
 }
 
@@ -25,12 +27,12 @@ img {
   height: auto;
 }
 /* / reset */
-body,html {
-  height:100%;
-}
 body {
-  background-color:#94dfff;
+  background-color:#93DEFE;
+  background:-webkit-gradient(linear, left top, left bottom, from(#b7eaff), to(#94dfff));
   background:linear-gradient(to bottom, #b7eaff 0%, #94dfff 100%);
+  background-repeat:no-repeat;
+  background-attachment: fixed;
 }
 
 .elem {
@@ -50,11 +52,13 @@ body {
 
 img.animated {
   /*animation-duration: 3s;*/
+  -webkit-animation-delay: 0.5s;
   animation-delay: 0.5s;
 }
 .border {
   border: 8px solid black;  
   border-radius: 5px;
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .cloud {
@@ -75,8 +79,14 @@ img.animated {
 }
 @media screen and (min-width:600px) {
   #container {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     height: 100vh; /*new*/
   }
