@@ -11,7 +11,6 @@ html {
   -webkit-box-sizing: inherit;
   box-sizing: inherit;
 }
-
 body, h1, h2, h3, h4, h5, h6, p, ol, ul {
   margin: 0;
   padding: 0;
@@ -27,6 +26,9 @@ img {
   height: auto;
 }
 /* / reset */
+html, body {
+  height:100%;
+}
 body {
   background-color:#93DEFE;
   background:-webkit-gradient(linear, left top, left bottom, from(#b7eaff), to(#94dfff));
@@ -49,7 +51,7 @@ body {
 }
 #drawing {
   margin:0 auto;
-  max-width:400px;
+  max-width:300px;
   background:#fff;
 }
 #drawing.border {
