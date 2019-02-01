@@ -44,16 +44,10 @@ body {
 #main {
   padding:1.0rem;
   width:100%;
+  position:relative;
+  margin:0 auto;
 }
 
-#drawing {
- 
-}
-#drawing {
-  
-  
-  
-}
 #drawing.border {
   
 } 
@@ -71,6 +65,9 @@ body {
 #drawing svg {
   border-color:#fff;
 }
+#drawing {
+  display:inline;
+}
 .box {
   display: inline-block;
   width: calc(100% / 2);
@@ -82,42 +79,11 @@ img.animated {
   -webkit-animation-delay: 0.5s;
   animation-delay: 0.5s;
 }
-.cloud {
-  position:absolute;
-  width:240px;
-  bottom:20%;
-  right:20%;
-  z-index:-1;
-}
-.cloud--2 {
-  top:10%;
+#tools.animated {
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
 }
 
-@media screen and (min-width:321px) {
-  .box {
-    width: calc(100% / 3);
-  }
-}
-@media screen and (min-width:600px) {
-  #container {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    height: 100vh; /*new*/
-  }
-  .box {
-    width: calc(100% / 5);
-  }
-  .cloud--2 {
-    left:20%;
-  }
-}
 @media screen and (min-width:700px) {
   #main {
     width:700px;
@@ -125,9 +91,11 @@ img.animated {
 }
 
 /* Landscape */
-@media only screen 
-  and (orientation: landscape) {
+@media only screen and (orientation: landscape) {
     #drawing svg {
       max-width:80vh; /* max-height:80vh makes svg scale crazy */
+    }
+      #tools {
+      
     }
 }

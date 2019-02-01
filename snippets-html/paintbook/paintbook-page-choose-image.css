@@ -1,0 +1,38 @@
+.cloud {
+  position:absolute;
+  width:240px;
+  bottom:20%;
+  right:20%;
+  z-index:-1;
+}
+.cloud--2 {
+  top:10%;
+}
+
+@media screen and (min-width:321px) {
+  .box {
+    width: calc(100% / 3);
+  }
+}
+@media screen and (min-width:600px) {
+  
+  #container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    height: 100vh; /*new*/
+  }
+
+  .box {
+    width: calc(100% / 5);
+  }
+  .cloud--2 {
+    left:20%;
+  }
+}
