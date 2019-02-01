@@ -96,6 +96,10 @@ img.animated {
       max-width:80vh; /* max-height:80vh makes svg scale crazy */
     }
       #tools {
-      
+        display: inline-block;
+        height: 100px;
+        background:red;
+        position: absolute;
+        top: 0;
     }
 }
