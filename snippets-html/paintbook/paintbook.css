@@ -48,9 +48,6 @@ body {
   margin:0 auto;
 }
 
-#drawing.border {
-  
-} 
 #container {
   overflow:hidden;
   text-align:center;
@@ -80,8 +77,33 @@ img.animated {
   animation-delay: 0.5s;
 }
 #tools.animated {
-  -webkit-animation-delay: 1s;
-  animation-delay: 1s;
+  -webkit-animation-delay: .8s;
+  animation-delay: .8s;
+}
+#tools ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+#tools ul li {
+  width:34px;
+  height:34px;
+  margin:10px;
+  display:inline-block;
+}
+#tools ul li a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  border:2px solid white;
+  -webkit-box-shadow: 00 2px 4px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 00 2px 4px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor:pointer;
+}
+#tools ul li a.active {
+  border-color:black;
+  border-width:3px;
 }
 
 @media screen and (min-width:700px) {
@@ -92,14 +114,15 @@ img.animated {
 
 /* Landscape */
 @media only screen and (orientation: landscape) {
-    #drawing svg {
-      max-width:80vh; /* max-height:80vh makes svg scale crazy */
-    }
-      #tools {
-        display: inline-block;
-        height: 100px;
-        background:red;
-        position: absolute;
-        top: 0;
-    }
+  #drawing svg {
+    max-width:80vh; /* max-height:80vh makes svg scale crazy */
+  }
+  #tools {
+      display: inline-block;
+      position: absolute;
+      top: 0;
+  }
+  #tools ul li {
+    display: block;
+  }
 }
