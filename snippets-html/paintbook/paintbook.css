@@ -61,6 +61,7 @@ body {
 }
 #drawing svg {
   border-color:#fff;
+  margin-top:40px;
 }
 #drawing {
   display:inline;
@@ -76,22 +77,27 @@ img.animated {
   -webkit-animation-delay: 0.5s;
   animation-delay: 0.5s;
 }
-#tools.animated {
+.tools--first {
+  position:absolute;
+  top:0;
+  display:inline-block;
+}
+.tools.animated {
   -webkit-animation-delay: .8s;
   animation-delay: .8s;
 }
-#tools ul {
+.tools--second ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
-#tools ul li {
+.tools--second ul li {
   width:34px;
   height:34px;
   margin:10px;
   display:inline-block;
 }
-#tools ul li a {
+.tools--second ul li a {
   display: block;
   height: 100%;
   width: 100%;
@@ -101,9 +107,30 @@ img.animated {
   box-shadow: 00 2px 4px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   cursor:pointer;
 }
-#tools ul li a.active {
+.tools--second ul li a.active {
   border-color:black;
   border-width:3px;
+}
+
+.circle.back {
+    margin:6px 0 5px;
+    display: block;
+    width: 34px;
+    height: 34px;
+    background: #00FF00;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    background-image: url(arrow-left.png);
+    background-position:50% 50%;
+    background-repeat:no-repeat;    
+    -webkit-box-shadow: 00 2px 4px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);    
+    box-shadow: 00 2px 4px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.hide {
+   position: absolute !important;
+   top: -9999px !important;
+   left: -9999px !important;
 }
 
 @media screen and (min-width:700px) {
@@ -116,13 +143,17 @@ img.animated {
 @media only screen and (orientation: landscape) {
   #drawing svg {
     max-width:80vh; /* max-height:80vh makes svg scale crazy */
+    margin-top:0;
   }
-  #tools {
+  .tools--second {
       display: inline-block;
       position: absolute;
       top: 0;
   }
-  #tools ul li {
-    display: block;
+  .tools--first { 
+    left:0;
+  }
+  .circle.back {
+    margin:10px 0 0 0;
   }
 }
