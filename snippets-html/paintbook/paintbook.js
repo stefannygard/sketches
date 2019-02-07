@@ -13,7 +13,7 @@ PaintBook.Global = {
   'clickEventType': { 
     'start':(document.ontouchstart === null && typeof (document.ontouchstart) === "object") || typeof(document.ontouchstart)=='undefined' ? 'mousedown':'touchstart',
     'move':(document.ontouchstart === null && typeof (document.ontouchstart) === "object") || typeof(document.ontouchstart)=='undefined' ? 'mousemove':'touchmove',
-    'up':(document.ontouchstart === null && typeof (document.ontouchstart) === "object") || typeof(document.ontouchstart)=='undefined' ? 'mousedown':'touchend',
+    'up':(document.ontouchstart === null && typeof (document.ontouchstart) === "object") || typeof(document.ontouchstart)=='undefined' ? 'mouseup':'touchend',
   },
   'getScreenSize': function() {
 		return { 
@@ -160,15 +160,16 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       boundingClientRect: this.draw.node.getBoundingClientRect(),
       bufferSize: 8,
       path: null,
-      strpath: null,
+      strPath: null,
       buffer: []
     };
-    // bind scopes to this and creates a new function
+    // bind: scope to this and create a new function
     this.penHandlerStart = this.penHandlerStart.bind(this); 
+    this.penHandlerMove = this.penHandlerMove.bind(this); 
+    this.penHandlerUp = this.penHandlerUp.bind(this); 
        
     //draw a background
     this.draw.rect(300, 350).fill({ color: '#fff' });
-
     var url = new URL(window.location.href);
     var svgId = url.searchParams.get("id");
     var _this = this;
@@ -197,18 +198,99 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }
   },
   penHandlerInit: function(data) {
+    
+    // todo: reorder svg paths so pen paths are above filled paths and below lines (unfilled paths)
+    
     // stop pen
     if(this.go.paintType != 'pen') {
-       this.draw.node.removeEventListener(this.go.clickEventType.start,this.penHandlerStart);
+      this.draw.node.removeEventListener(this.go.clickEventType.start,this.penHandlerStart);
+      this.draw.node.removeEventListener(this.go.clickEventType.move,this.penHandlerMove);
+      this.draw.node.removeEventListener(this.go.clickEventType.up,this.penHandlerUp);
     }
     // start pen
     else if(this.go.paintType == 'pen') {
       this.draw.node.addEventListener(this.go.clickEventType.start, this.penHandlerStart);
+      this.draw.node.addEventListener(this.go.clickEventType.move, this.penHandlerMove);
+      this.draw.node.addEventListener(this.go.clickEventType.up, this.penHandlerUp);
     }
   },
   penHandlerStart: function(e) {
     // https://stackoverflow.com/questions/40324313/svg-smooth-freehand-drawing
-    console.log("starting", this);
+    this.penData.boundingClientRect = this.draw.node.getBoundingClientRect();
+    this.penData.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    this.penData.path.setAttribute("fill", "none");
+    this.penData.path.setAttribute("stroke", this.go.currentColor);
+    this.penData.path.setAttribute("stroke-width", this.penData.strokeWidth);
+    this.penData.buffer = [];
+    var pt = this.getMousePosition(e);
+    this.penHandlerAppendToBuffer(pt);
+    this.penData.strPath = "M" + pt.x + " " + pt.y;
+    this.penData.path.setAttribute("d", this.penData.strPath);
+    this.draw.node.appendChild(this.penData.path);
+  },
+  penHandlerMove: function(e) {
+    if (this.penData.path) {
+        this.penHandlerAppendToBuffer(this.getMousePosition(e));
+        this.penHandlerUpdateSvgPath();
+    }
+  },
+  penHandlerUp: function(e) {
+    if (this.penData.path) {
+      var p = SVG.adopt(this.penData.path);
+      p.click(function(){ _this.fillHandler.apply(_this, [this]) });
+      this.penData.path = null;
+    }
+  },
+  getMousePosition: function (e) {
+    return {
+        x: (e.pageX - this.penData.boundingClientRect.left) * 300/this.penData.boundingClientRect.width,
+        y: (e.pageY - this.penData.boundingClientRect.top) * 350/this.penData.boundingClientRect.height
+    }
+  },
+  penHandlerAppendToBuffer: function (pt) {
+    this.penData.buffer.push(pt);
+    while (this.penData.buffer.length > this.penData.bufferSize) {
+        this.penData.buffer.shift();
+    }
+  },
+  penHandlerGetAveragePoint: function (offset) {
+    var len = this.penData.buffer.length;
+    if (len % 2 === 1 || len >= this.penData.bufferSize) {
+        var totalX = 0;
+        var totalY = 0;
+        var pt, i;
+        var count = 0;
+        for (i = offset; i < len; i++) {
+            count++;
+            pt = this.penData.buffer[i];
+            totalX += pt.x;
+            totalY += pt.y;
+        }
+        return {
+            x: totalX / count,
+            y: totalY / count
+        }
+    }
+    return null;
+  },
+  penHandlerUpdateSvgPath: function () {
+    var pt = this.penHandlerGetAveragePoint(0);
+
+    if (pt) {
+        // Get the smoothed part of the path that will not change
+        this.penData.strPath += " L" + pt.x + " " + pt.y;
+
+        // Get the last part of the path (close to the current mouse position)
+        // This part will change if the mouse moves again
+        var tmpPath = "";
+        for (var offset = 2; offset < this.penData.buffer.length; offset += 2) {
+            pt = this.penHandlerGetAveragePoint(offset);
+            tmpPath += " L" + pt.x + " " + pt.y;
+        }
+
+        // Set the complete current path coordinates
+        this.penData.path.setAttribute("d", this.penData.strPath + tmpPath);
+    }
   }
 });
 
