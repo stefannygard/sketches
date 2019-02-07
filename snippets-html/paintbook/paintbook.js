@@ -156,9 +156,9 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.draw.node.setAttribute('preserveAspectRatio', 'xMinYMin meet');
     
     this.penData = {
-      strokeWidth: 2,
+      strokeWidth: 10,
       boundingClientRect: this.draw.node.getBoundingClientRect(),
-      bufferSize: 8,
+      bufferSize: 3,
       path: null,
       strPath: null,
       buffer: []
@@ -175,6 +175,14 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     var _this = this;
     var onSuccess = function(data) {
       _this.draw.svg(data);
+      
+      // reorder
+      var pathsFilled = $(_this.draw.node).find("path[fill='#FFFFFF']");
+      _this.pathsFilledCount = pathsFilled.length;
+      var pathsNotFilled = $(_this.draw.node).find("path[fill!='#FFFFFF']");
+      _this.pathsParentEl = $(pathsFilled[0]).parent();
+      // move lines to front
+      _this.pathsParentEl.append(pathsNotFilled); 
       
       _this.draw.each(function(i, children) {
         // click event on all but black lines
@@ -226,7 +234,8 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.penHandlerAppendToBuffer(pt);
     this.penData.strPath = "M" + pt.x + " " + pt.y;
     this.penData.path.setAttribute("d", this.penData.strPath);
-    this.draw.node.appendChild(this.penData.path);
+    //insert path between filled areas and lines
+    $(this.draw.node).find("g > path:nth-child(" + (this.pathsFilledCount) + ")").after(this.penData.path);
   },
   penHandlerMove: function(e) {
     if (this.penData.path) {
