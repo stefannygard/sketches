@@ -116,7 +116,7 @@ img.animated {
 .tools ul li a.active {
   border-style: solid;
   border-color:black;
-  border-width:3px;
+  border-width:6px;
 }
 
 .tools--first .btn {
