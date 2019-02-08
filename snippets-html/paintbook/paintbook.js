@@ -180,6 +180,9 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       var pathsFilled = $(_this.draw.node).find("path[fill='#FFFFFF']");
       _this.pathsFilledCount = pathsFilled.length;
       var pathsNotFilled = $(_this.draw.node).find("path[fill!='#FFFFFF']");
+      
+      
+      
       _this.pathsParentEl = $(pathsFilled[0]).parent();
       // move lines to front
       _this.pathsParentEl.append(pathsNotFilled); 
