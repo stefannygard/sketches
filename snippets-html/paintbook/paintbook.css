@@ -32,6 +32,10 @@ a {
 html, body {
   height:100%;
 }
+html {
+  -ms-touch-action: pinch-zoom;
+  touch-action: pinch-zoom;
+}
 body {
   background-color:#93DEFE;
   background:-webkit-gradient(linear, left top, left bottom, from(#b7eaff), to(#94dfff));
