@@ -206,7 +206,6 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }
   },
   penHandlerInit: function(data) {
-    console.log(this.go.clickEventType);
     // todo: reorder svg paths so pen paths are above filled paths and below lines (unfilled paths)
     
     // stop pen
