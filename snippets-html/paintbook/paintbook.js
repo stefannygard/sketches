@@ -11,9 +11,9 @@ PaintBook.Global = {
   'currentColor': 'red',
   'paintType': 'bucket',
   'clickEventType': { 
-    'start':(document.ontouchstart === null && typeof (document.ontouchstart) === "object") || typeof(document.ontouchstart)=='undefined' ? 'mousedown':'touchstart',
-    'move':(document.ontouchstart === null && typeof (document.ontouchstart) === "object") || typeof(document.ontouchstart)=='undefined' ? 'mousemove':'touchmove',
-    'up':(document.ontouchstart === null && typeof (document.ontouchstart) === "object") || typeof(document.ontouchstart)=='undefined' ? 'mouseup':'touchend',
+    'start': !Modernizr.touchevents ? 'mousedown':'touchstart',
+    'move': !Modernizr.touchevents ? 'mousemove':'touchmove',
+    'up': !Modernizr.touchevents ? 'mouseup':'touchend',
   },
   'getScreenSize': function() {
 		return { 
@@ -206,7 +206,7 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }
   },
   penHandlerInit: function(data) {
-    
+    console.log(this.go.clickEventType);
     // todo: reorder svg paths so pen paths are above filled paths and below lines (unfilled paths)
     
     // stop pen
@@ -223,8 +223,8 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }
   },
   penHandlerStart: function(e) {
-    if($.isArray(e)) e = touches[0];
-    
+    if (e.targetTouches.length >= 1) e = e.targetTouches.item(0);  
+
     // https://stackoverflow.com/questions/40324313/svg-smooth-freehand-drawing
     this.penData.boundingClientRect = this.draw.node.getBoundingClientRect();
     this.penData.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -240,14 +240,16 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     $(this.draw.node).find("g > path:nth-child(" + (this.pathsFilledCount) + ")").after(this.penData.path);
   },
   penHandlerMove: function(e) {
-    if($.isArray(e)) e = touches[0];
+    if (e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
+    
     if (this.penData.path) {
         this.penHandlerAppendToBuffer(this.getMousePosition(e));
         this.penHandlerUpdateSvgPath();
     }
   },
   penHandlerUp: function(e) {
-    if($.isArray(e)) e = touches[0];
+    if (e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
+    
     if (this.penData.path) {
       var p = SVG.adopt(this.penData.path);
       p.click(function(){ _this.fillHandler.apply(_this, [this]) });
@@ -314,7 +316,7 @@ PaintBook.app = function() {
   
   var paint = new PaintBook.PaintHandler();
   var menu = new PaintBook.MenuHandler();
-  
+
   go.menu2El.bind('paintBook.menuClick',
     function(event,data) {
       switch(data.type) {
