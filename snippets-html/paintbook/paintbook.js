@@ -223,6 +223,8 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }
   },
   penHandlerStart: function(e) {
+    if($.isArray(e)) e = touches[0];
+    
     // https://stackoverflow.com/questions/40324313/svg-smooth-freehand-drawing
     this.penData.boundingClientRect = this.draw.node.getBoundingClientRect();
     this.penData.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -238,12 +240,14 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     $(this.draw.node).find("g > path:nth-child(" + (this.pathsFilledCount) + ")").after(this.penData.path);
   },
   penHandlerMove: function(e) {
+    if($.isArray(e)) e = touches[0];
     if (this.penData.path) {
         this.penHandlerAppendToBuffer(this.getMousePosition(e));
         this.penHandlerUpdateSvgPath();
     }
   },
   penHandlerUp: function(e) {
+    if($.isArray(e)) e = touches[0];
     if (this.penData.path) {
       var p = SVG.adopt(this.penData.path);
       p.click(function(){ _this.fillHandler.apply(_this, [this]) });
