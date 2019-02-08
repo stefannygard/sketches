@@ -32,9 +32,8 @@ a {
 html, body {
   height:100%;
 }
-body, html {
-  -ms-touch-action: pinch-zoom;
-  touch-action: pinch-zoom;
+body {
+  overscroll-behavior-y: contain;
 }
 body {
   background-color:#93DEFE;
