@@ -1,83 +1,108 @@
-@-webkit-keyframes blink {
-  0% {
-    -webkit-transform: scale(1, 1);
-    transform: scale(1, 1);
-    stroke-width: 2px;
-  }
-  10% {
-    -webkit-transform: scale(1, 0);
-    transform: scale(1, 0);
-    stroke-width: 2px;
-  }
-  20% {
-    -webkit-transform: scale(1, 1);
-    transform: scale(1, 1);
-    stroke-width: 2px;
-  }
+html, body {
+    height: 100%;
 }
+body {
+  
+  margin:0; 
+}
+.aligner {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height:100vh;
+  
 
-@keyframes blink {
-  0% {
-    -webkit-transform: scale(1, 1);
-    transform: scale(1, 1);
-    stroke-width: 2px;
-  }
-  10% {
-    -webkit-transform: scale(1, 0);
-    transform: scale(1, 0);
-    stroke-width: 2px;
-  }
-  20% {
-    -webkit-transform: scale(1, 1);
-    transform: scale(1, 1);
-    stroke-width: 2px;
-  }
+}
+.area {
+  border:3px solid black; 
+  background:green;
+
 }
 
 @-webkit-keyframes squeeze {
-  90% {
-    -webkit-transform: none;
-    transform: none;
+  0% {
     -webkit-animation-timing-function: ease-in;
     animation-timing-function: ease-in;
-  }
-  93% {
     -webkit-transform: translateY(3px) scaleY(0.8);
     transform: translateY(3px) scaleY(0.8)
   }
-  100% {
+  10% {
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
+    -webkit-transform: none;
+    transform: none;
+  }
+  14% {
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+    -webkit-transform: translateY(3px) scaleY(0.8);
+    transform: translateY(3px) scaleY(0.8)
+  }
+  24% {
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+    -webkit-transform: none;
+    transform: none;
   }
 }
 
+
 @keyframes squeeze {
-  90% {
-    -webkit-transform: none;
-    transform: none;
+  0% {
     -webkit-animation-timing-function: ease-in;
     animation-timing-function: ease-in;
-  }
-  93% {
     -webkit-transform: translateY(3px) scaleY(0.8);
     transform: translateY(3px) scaleY(0.8)
   }
-  100% {
+  10% {
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
+    -webkit-transform: none;
+    transform: none;
+  }
+  14% {
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+    -webkit-transform: translateY(3px) scaleY(0.8);
+    transform: translateY(3px) scaleY(0.8)
+  }
+  24% {
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+    -webkit-transform: none;
+    transform: none;
   }
 }
 
 @-webkit-keyframes hideshow {
-  90% {
+  0% {
      opacity:1;
     -webkit-animation-timing-function: ease-in;
     animation-timing-function: ease-in;
-  }
-  93% {
     opacity:0;
   }
-  100% {
+  10% {
+    opacity:1;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  14% {
+     opacity:1;
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+    opacity:0;
+  }
+  24% {
     opacity:1;
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
@@ -85,15 +110,24 @@
 }
 
 @keyframes hideshow {
-  90% {
+  0% {
      opacity:1;
     -webkit-animation-timing-function: ease-in;
     animation-timing-function: ease-in;
-  }
-  93% {
     opacity:0;
   }
-  100% {
+  10% {
+    opacity:1;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  14% {
+     opacity:1;
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+    opacity:0;
+  }
+  24% {
     opacity:1;
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
@@ -101,12 +135,12 @@
 }
 
 .pupil {
-  -webkit-animation: hideshow 1.5s ease-in-out infinite;
-  animation: hideshow 1.5s ease-in-out infinite;
+  -webkit-animation: hideshow 1.5s ease-in-out;
+  animation: hideshow 1.5s ease-in-out;
 }
 .blink {
-  -webkit-animation: squeeze 1.5s ease-in-out infinite;
-  animation: squeeze 1.5s ease-in-out infinite;
+  -webkit-animation: squeeze 1.5s ease-in-out;
+  animation: squeeze 1.5s ease-in-out;
   -webkit-transform-origin: center;
   transform-origin: center;
 }
