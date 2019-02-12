@@ -99,7 +99,6 @@
     animation-timing-function: ease-out;
   }
 }
-
 .pupil {
   -webkit-animation: hideshow 1.5s ease-in-out infinite;
   animation: hideshow 1.5s ease-in-out infinite;

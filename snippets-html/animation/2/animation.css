@@ -133,7 +133,9 @@ body {
     animation-timing-function: ease-out;
   }
 }
-
+.outside-pupil {
+  visibility:hidden;
+}
 .pupil {
   -webkit-animation: hideshow 1.5s ease-in-out;
   animation: hideshow 1.5s ease-in-out;
