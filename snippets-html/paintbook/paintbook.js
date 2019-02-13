@@ -203,7 +203,6 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       
       // animate, todo: refactor to its own handler
       _this.animateDrawingData = {};
-      _this.animateDrawingData.offset = $("svg").offset();
       _this.animateDrawingData.eye1 = $('#eye-1');
       _this.animateDrawingData.eye2 = $('#eye-2');
          
@@ -246,11 +245,12 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }, 10);
   },
   animateDrawingMove: function(e) {
+    var offset = $(this.draw.node).offset();
     if(!this.animateDrawingData.eye1.length) return false;
     if (typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
     
-    var x = this.animateDrawingData.offset.left + 181.792 + 50
-    var y = this.animateDrawingData.offset.top + 52.587
+    var x = offset.left + 181.792 + 50
+    var y = offset.top + 52.587
 
     var rad = Math.atan2(e.pageX - x, e.pageY - y);
     var rot = (rad * (180 / Math.PI) * -1);
