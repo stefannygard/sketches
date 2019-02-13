@@ -99,20 +99,21 @@ PaintBook.MenuHandler = PaintBook.Class.extend({
     var activeClass;
     for(var i=0; i < showColorsCount; i++) {
         activeClass = this.go.currentColor == this.go.colors[i] ? "active" : "";
-		toolsColorsUl.append('<li><a style="background-color:'+this.go.colors[i]+'" class="'+ activeClass +'"></a></li>').find('li:last-child a').bind(this.go.clickEventType.up, function() { _this.colorHandler.apply(_this, [this]); });
+		toolsColorsUl.append('<li><a style="background-color:'+this.go.colors[i]+'" class="'+ activeClass +'"></a></li>').find('li:last-child a').bind('touchstart mousedown', function(e) { _this.colorHandler.apply(_this, [this,e]); });
 	}
   },
   attachEvents: function(){
     var _this = this;
     
-    this.go.menu2El.find('.btn--bucket').bind(this.go.clickEventType.up, 
-        function() { _this.bucketHandler.apply(_this, [this]); });
+    this.go.menu2El.find('.btn--bucket').bind('touchstart mousedown', 
+        function(e) { _this.bucketHandler.apply(_this, [this,e]); });
     
-    this.go.menu2El.find('.btn--pen').bind(this.go.clickEventType.up, 
-        function() { _this.penHandler.apply(_this, [this]); });
+    this.go.menu2El.find('.btn--pen').bind('touchstart mousedown', 
+        function(e) { _this.penHandler.apply(_this, [this,e]); });
     
   },
-  bucketHandler: function(target) {
+  bucketHandler: function(target,e) {
+    e.preventDefault();
 	var el = $(target);
 	this.go.paintType = 'bucket';
 	this.go.menu2El.find('.active').removeClass('active');
@@ -120,17 +121,21 @@ PaintBook.MenuHandler = PaintBook.Class.extend({
     this.triggerMenuClickEvent(el, {'type':'bucket'});
     return false;
   },
-  penHandler: function(target) {
+  penHandler: function(target,e) {
+    e.preventDefault();
 	var el = $(target);
+    
 	this.go.paintType = 'pen';
 	this.go.menu2El.find('.active').removeClass('active');
 	el.addClass('active');
     this.triggerMenuClickEvent(el, {'type':'pen'});
     return false;
   },
-  colorHandler: function(target){
+  colorHandler: function(target,e){
+    e.preventDefault();
 	var el = $(target);
 	PaintBook.Global.currentColor = el.css('background-color');
+    this.triggerMenuClickEvent(el, {'type':'color','e':e});
 	this.toggleActive(el);	
   },
   toggleActive: function(el){
@@ -167,6 +172,8 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.penHandlerStart = this.penHandlerStart.bind(this); 
     this.penHandlerMove = this.penHandlerMove.bind(this); 
     this.penHandlerUp = this.penHandlerUp.bind(this); 
+    
+    this.animateDrawingMove = this.animateDrawingMove.bind(this); 
        
     //draw a background
     this.draw.rect(300, 350).fill({ color: '#fff' });
@@ -177,9 +184,9 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       _this.draw.svg(data);
       
       // reorder
-      var pathsFilled = $(_this.draw.node).find("path[fill='#FFFFFF']");
+      var pathsFilled = $(_this.draw.node).find("g g path[fill='#FFFFFF']");
       _this.pathsFilledCount = pathsFilled.length;
-      var pathsNotFilled = $(_this.draw.node).find("path[fill!='#FFFFFF']");
+      var pathsNotFilled = $(_this.draw.node).find("g g path[fill!='#FFFFFF']");
  
       _this.pathsParentEl = $(pathsFilled[0]).parent();
       // move lines to front
@@ -194,10 +201,20 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       
       
       // animate, todo: refactor to its own handler
+      _this.animateDrawingData = {};
+      _this.animateDrawingData.offset = $("svg").offset();
+      _this.animateDrawingData.eye1 = $('#eye-1');
+      _this.animateDrawingData.eye2 = $('#eye-2');
+         
+      //
       
+      // what to do...
+      $('body').mousemove(_this.animateDrawingMove);
+      _this.draw.node.addEventListener('touchmove', _this.animateDrawingMove);
       
-      
-      
+      $(_this.draw.node).click(_this.animateDrawingUp);
+      // / animate
+
     }
     
     $.ajax({
@@ -212,6 +229,30 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     if(this.go.paintType == 'bucket') {
       target.fill({ color: this.go.currentColor }); 
     }
+  },
+  animateDrawingAction: function(data) {
+    this.animateDrawingUp(data.e);
+  },
+  animateDrawingUp: function(e) {
+    $('.pupil').css('webkitAnimation', 'none');
+    $('.blink').css('webkitAnimation', 'none');
+    setTimeout(function() {
+      $('.pupil').css('webkitAnimation', '');
+      $('.blink').css('webkitAnimation', '');
+    }, 10);
+  },
+  animateDrawingMove: function(e) {
+    if (typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
+    
+    var x = this.animateDrawingData.offset.left + 181.792 + 50
+    var y = this.animateDrawingData.offset.top + 52.587
+
+    var rad = Math.atan2(e.pageX - x, e.pageY - y);
+    var rot = (rad * (180 / Math.PI) * -1);
+
+    this.animateDrawingData.eye1.attr({ 'transform': 'rotate(' + rot + ' 181.792 52.587)'});
+
+    this.animateDrawingData.eye2.attr({ 'transform': 'rotate(' + rot + ' 199.858 50.86)'});
   },
   penHandlerInit: function(data) {
     // todo: reorder svg paths so pen paths are above filled paths and below lines (unfilled paths)
@@ -324,12 +365,14 @@ PaintBook.app = function() {
   var paint = new PaintBook.PaintHandler();
   var menu = new PaintBook.MenuHandler();
 
-  go.menu2El.bind('paintBook.menuClick',
+  go.menu1El.add(go.menu2El).bind('paintBook.menuClick',
     function(event,data) {
       switch(data.type) {
         case 'pen':
         case 'bucket':
           paint.penHandlerInit(data);
+        case 'color':
+          paint.animateDrawingAction(data);
           break;
       }
     }
