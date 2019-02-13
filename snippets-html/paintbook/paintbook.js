@@ -174,6 +174,7 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.penHandlerUp = this.penHandlerUp.bind(this); 
     
     this.animateDrawingMove = this.animateDrawingMove.bind(this); 
+    this.animateDrawingUp = this.animateDrawingUp.bind(this); 
        
     //draw a background
     this.draw.rect(300, 350).fill({ color: '#fff' });
@@ -209,11 +210,12 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       //
       
       // what to do...
-      $('body').mousemove(_this.animateDrawingMove);
-      _this.draw.node.addEventListener('touchmove', _this.animateDrawingMove);
-      
-      $(_this.draw.node).click(_this.animateDrawingUp);
-      // / animate
+      if(_this.animateDrawingData.eye1.length) {
+        $('body').mousemove(_this.animateDrawingMove);
+        _this.draw.node.addEventListener('touchmove', _this.animateDrawingMove);
+
+        $(_this.draw.node).click(_this.animateDrawingUp);
+      }
 
     }
     
@@ -234,6 +236,7 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.animateDrawingUp(data.e);
   },
   animateDrawingUp: function(e) {
+    if(!this.animateDrawingData.eye1.length) return false;
     $('.pupil').css('webkitAnimation', 'none');
     $('.blink').css('webkitAnimation', 'none');
     setTimeout(function() {
@@ -242,6 +245,7 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }, 10);
   },
   animateDrawingMove: function(e) {
+    if(!this.animateDrawingData.eye1.length) return false;
     if (typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
     
     var x = this.animateDrawingData.offset.left + 181.792 + 50
