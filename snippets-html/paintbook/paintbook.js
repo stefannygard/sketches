@@ -234,6 +234,7 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
   },
   animateDrawingAction: function(data) {
     this.animateDrawingUp(data.e);
+    this.animateDrawingMove(data.e);
   },
   animateDrawingUp: function(e) {
     if(!this.animateDrawingData.eye1.length) return false;
