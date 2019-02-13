@@ -180,9 +180,7 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       var pathsFilled = $(_this.draw.node).find("path[fill='#FFFFFF']");
       _this.pathsFilledCount = pathsFilled.length;
       var pathsNotFilled = $(_this.draw.node).find("path[fill!='#FFFFFF']");
-      
-      
-      
+ 
       _this.pathsParentEl = $(pathsFilled[0]).parent();
       // move lines to front
       _this.pathsParentEl.append(pathsNotFilled); 
@@ -193,6 +191,13 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
           this.click(function(){ _this.fillHandler.apply(_this, [this]) });
         }
       }, true);
+      
+      
+      // animate, todo: refactor to its own handler
+      
+      
+      
+      
     }
     
     $.ajax({
