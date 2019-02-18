@@ -186,9 +186,9 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       _this.draw.svg(data);
       
       // reorder
-      var pathsFilled = $(_this.draw.node).find("g g path[fill='#FFFFFF']");
+      var pathsFilled = $(_this.draw.node).find("g path[fill='#FFFFFF']");
       _this.pathsFilledCount = pathsFilled.length;
-      var pathsNotFilled = $(_this.draw.node).find("g g path[fill!='#FFFFFF']");
+      var pathsNotFilled = $(_this.draw.node).find("g path[fill!='#FFFFFF']");
  
       _this.pathsParentEl = $(pathsFilled[0]).parent();
       // move lines to front
@@ -289,8 +289,6 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.penData.strPath = "M" + pt.x + " " + pt.y;
     this.penData.path.setAttribute("d", this.penData.strPath);
     // make a clippath from ClipEl
-    //this.draw.clip().add($(this.penData.clipEl));
-    
     var drawingOnRawEl = e.target;
     // todo: reuse existing
     var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
