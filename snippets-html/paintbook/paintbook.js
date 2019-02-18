@@ -281,6 +281,8 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.penData.path.setAttribute("fill", "none");
     this.penData.path.setAttribute("stroke", this.go.currentColor);
     this.penData.path.setAttribute("stroke-width", this.penData.strokeWidth);
+    this.penData.path.setAttribute("stroke-linecap", "round");
+    
     this.penData.buffer = [];
     var pt = this.getMousePosition(e);
     this.penHandlerAppendToBuffer(pt);
