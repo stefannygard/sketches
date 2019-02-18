@@ -186,10 +186,10 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       _this.draw.svg(data);
       
       // reorder
-      var pathsFilled = $(_this.draw.node).find("g path[fill='#FFFFFF']");
+      
+      var pathsFilled = $(_this.draw.node).find("g path[fill='#FFFFFF']").not(".pupil");
+      var pathsNotFilled = $(_this.draw.node).find("g path[fill!='#FFFFFF']").not(".pupil");
       _this.pathsFilledCount = pathsFilled.length;
-      var pathsNotFilled = $(_this.draw.node).find("g path[fill!='#FFFFFF']");
- 
       _this.pathsParentEl = $(pathsFilled[0]).parent();
       // move lines to front
       _this.pathsParentEl.append(pathsNotFilled); 
@@ -254,7 +254,6 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
 
     var rad = Math.atan2(e.pageX - x, e.pageY - y);
     var rot = (rad * (180 / Math.PI) * -1);
-
     this.animateDrawingData.eye1.attr({ 'transform': 'rotate(' + rot + ' 181.792 52.587)'});
 
     this.animateDrawingData.eye2.attr({ 'transform': 'rotate(' + rot + ' 199.858 50.86)'});
