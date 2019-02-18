@@ -166,7 +166,8 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       bufferSize: 3,
       path: null,
       strPath: null,
-      buffer: []
+      buffer: [],
+      clipEl: null,
     };
     // bind: scope to this and create a new function
     this.penHandlerStart = this.penHandlerStart.bind(this); 
@@ -205,9 +206,7 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
       _this.animateDrawingData = {};
       _this.animateDrawingData.eye1 = $('#eye-1');
       _this.animateDrawingData.eye2 = $('#eye-2');
-         
-      //
-      
+
       // what to do...
       if(_this.animateDrawingData.eye1.length) {
         $('body').mousemove(_this.animateDrawingMove);
@@ -245,9 +244,10 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }, 10);
   },
   animateDrawingMove: function(e) {
+    if(typeof e === "undefined") return false;
     var offset = $(this.draw.node).offset();
     if(!this.animateDrawingData.eye1.length) return false;
-    if (typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
+    if (typeof e !== "undefined" && typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
     
     var x = offset.left + 181.792 + 50
     var y = offset.top + 52.587
@@ -260,8 +260,6 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.animateDrawingData.eye2.attr({ 'transform': 'rotate(' + rot + ' 199.858 50.86)'});
   },
   penHandlerInit: function(data) {
-    // todo: reorder svg paths so pen paths are above filled paths and below lines (unfilled paths)
-    
     // stop pen
     if(this.go.paintType != 'pen') {
       this.draw.node.removeEventListener(this.go.clickEventType.start,this.penHandlerStart);
@@ -277,7 +275,6 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
   },
   penHandlerStart: function(e) {
     if (typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
-
     // https://stackoverflow.com/questions/40324313/svg-smooth-freehand-drawing
     this.penData.boundingClientRect = this.draw.node.getBoundingClientRect();
     this.penData.path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -289,11 +286,23 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     this.penHandlerAppendToBuffer(pt);
     this.penData.strPath = "M" + pt.x + " " + pt.y;
     this.penData.path.setAttribute("d", this.penData.strPath);
+    // make a clippath from ClipEl
+    //this.draw.clip().add($(this.penData.clipEl));
+    
+    var drawingOnRawEl = e.target;
+    // todo: reuse existing
+    var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+    clipPath.id = "clip-path-"+Date.now();
+    clipPath.append(drawingOnRawEl.cloneNode());
+    $(this.draw.node).find('defs').first().append(clipPath);
+    
+    this.penData.path.setAttribute("clip-path", "url(#"+clipPath.id+")");
+    
     //insert path between filled areas and lines
     $(this.draw.node).find("g > path:nth-child(" + (this.pathsFilledCount) + ")").after(this.penData.path);
   },
   penHandlerMove: function(e) {
-    if (typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
+    if (typeof e !== "undefined" && typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
     
     if (this.penData.path) {
         this.penHandlerAppendToBuffer(this.getMousePosition(e));
@@ -301,7 +310,7 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     }
   },
   penHandlerUp: function(e) {
-    if (typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
+    if (typeof e !== "undefined" && typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
     
     if (this.penData.path) {
       var p = SVG.adopt(this.penData.path);
