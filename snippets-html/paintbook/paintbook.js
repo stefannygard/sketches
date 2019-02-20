@@ -9,7 +9,7 @@ PaintBook.Global = {
   'menu2': 'tools--first',
   'colors': ["red", "orange", "yellow", "green", "blue", 'white'],
   'currentColor': 'red',
-  'paintType': 'bucket',
+  'paintType': 'pen',
   'clickEventType': { 
     'start': !Modernizr.touchevents ? 'mousedown':'touchstart',
     'move': !Modernizr.touchevents ? 'mousemove':'touchmove',
@@ -90,7 +90,6 @@ PaintBook.MenuHandler = PaintBook.Class.extend({
 	this.go = PaintBook.Global;
     this.attachEvents();
     this.drawColors();
-    
   },
   drawColors: function() {
     var showColorsCount = this.go.colors.length;
@@ -223,6 +222,8 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
 		success: onSuccess,
 		dataType: "text"
 	});
+    
+    if(this.go.paintType == 'pen') { this.penHandlerInit(); }
     
   },
   fillHandler: function(target) {
