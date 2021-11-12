@@ -9,7 +9,7 @@ PaintBook.Global = {
   'menu2': 'tools--first',
   'colors': ["red", "orange", "yellow", "green", "blue", 'white'],
   'currentColor': 'red',
-  'paintType': 'pen',
+  'paintType': 'bucket',
   'clickEventType': { 
     'start': !Modernizr.touchevents ? 'mousedown':'touchstart',
     'move': !Modernizr.touchevents ? 'mousemove':'touchmove',
