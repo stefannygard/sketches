@@ -308,6 +308,8 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
         this.penHandlerAppendToBuffer(this.getMousePosition(e));
         this.penHandlerUpdateSvgPath();
     }
+	  
+    e.stopPropagation();
   },
   penHandlerUp: function(e) {
     if (typeof e !== "undefined" && typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
