@@ -302,14 +302,13 @@ PaintBook.PaintHandler = PaintBook.Class.extend ({
     $(this.draw.node).find("g > path:nth-child(" + (this.pathsFilledCount) + ")").after(this.penData.path);
   },
   penHandlerMove: function(e) {
-    if (typeof e !== "undefined" && typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
-    
+    var _e = e;
+    if (typeof e !== "undefined" && typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) _e = e.targetTouches.item(0); 
+    e.preventDefault();
     if (this.penData.path) {
-        this.penHandlerAppendToBuffer(this.getMousePosition(e));
+        this.penHandlerAppendToBuffer(this.getMousePosition(_e));
         this.penHandlerUpdateSvgPath();
     }
-	  
-    e.stopPropagation();
   },
   penHandlerUp: function(e) {
     if (typeof e !== "undefined" && typeof e.targetTouches !== 'undefined' && e.targetTouches.length >= 1) e = e.targetTouches.item(0); 
