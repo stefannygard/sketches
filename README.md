@@ -1,3 +1,3 @@
 # Sketches
 
-Prototypes, or "Sketches" made in order to try out new ideas. 
+prototypes, or "Sketches" made in order to try out new ideas. 
